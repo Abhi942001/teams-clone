@@ -1,0 +1,17 @@
+.navbar{
+    display: flex;
+    align-items: center;
+    background-color: #6264a7;
+    height: 4.8rem;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.navbar :first-child{
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+    width: 680px;
+    border-radius: 6px;
+}
+

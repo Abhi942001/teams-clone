@@ -1,0 +1,6 @@
+.Room{
+    display: flex;
+}
+.chatRoom{
+    background-color: blue;
+}
