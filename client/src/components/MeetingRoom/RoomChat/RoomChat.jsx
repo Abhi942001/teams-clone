@@ -1,62 +1,77 @@
-import { useState,useEffect, useRef } from "react";
-import {db} from "../../../firebase"
+import { useState, useEffect } from "react";
+import { db } from "../../../firebase";
 import { useAuth } from "../../../contexts/AuthContext";
 import MessagesPart from "./MessagesPart";
-import {useCollectionData} from 'react-firebase-hooks/firestore'
-
+import { TextField } from "@fluentui/react";
+import { IconButton } from "@fluentui/react/lib/Button";
+import { Icon } from "@fluentui/react/lib/Icon";
+import "./RoomChat.css";
 
 const RoomChat = (props) => {
-    const{currentUser}=useAuth();
-    const roomID=props.roomID;
-    const [message,setMessage]=useState("");
-    const messageRef=db.collection('messages');
-    const {displayName,uid}=currentUser
+  const [messages, setMessages] = useState([]);
+  const { roomID } = props;
+  const { currentUser } = useAuth();
+  const [newMessage, setNewMessage] = useState("");
 
-    const query= messageRef.orderBy('createdAt').limit(25);
-    
-    const [messages]=useCollectionData(query,{idField:roomID});
-    console.log(useCollectionData(query));
-    
+  useEffect(() => {
+    if (db) {
+      const unsubscribe = db
+        .collection(roomID)
+        .orderBy("createdAt")
+        .limit(100)
+        .onSnapshot((querySnapshot) => {
+          const data = querySnapshot.docs.map((doc) => ({
+            ...doc.data(),
+            id: doc.id,
+          }));
+          setMessages(data);
+        });
 
+      return unsubscribe;
+    }
+  }, [db]);
 
-
-
-const handleSubmit=async (e)=>{
+  const handleOnChange = (e) => {
+    setNewMessage(e.target.value);
+  };
+  const handleOnSubmit = (e) => {
     e.preventDefault();
-    await messageRef.doc(roomID).set({
-        displayName,
-        id:uid,
-        createdOn:new Date(),
-        msg:message,
+    if (db) {
+      db.collection(roomID).add({
+        text: newMessage,
+        createdAt: new Date(),
+        userId: currentUser.uid,
+        displayName: currentUser.displayName,
+      });
+    }
+    setNewMessage("");
+  };
 
-
-    })
-    setMessage("");
-
+  return (
+    <div className="RoomChat">
+      <div className="messages">
+        <div className="messages-container">
+          {messages.map((message) => (
+            <MessagesPart msg={message} key={message.id} />
+          ))}
+        </div>
+      </div>
+      <div className="message-form">
+        <form onSubmit={handleOnSubmit}>
+          <TextField
+            className="msg-input"
+            value={newMessage}
+            onChange={handleOnChange}
+            placeholder="Type message..."
+            underlined
+          />
+          <IconButton type="submit" disabled={!newMessage} style={{marginLeft: "auto"}}>
+            <Icon iconName="send"></Icon>
+          </IconButton>
+        </form>
+      </div>
+    </div>
+  );
 };
 
-
-
-
-    return ( 
-        <div className="RoomChat">
-            {roomID}
-            <div>
-                {messages && messages.map(msg=><RoomChat key={msg.id} message={msg}/>)}
-            </div>
-
-            <form onSubmit={handleSubmit}>
-                <textarea 
-                value={message}
-                onChange={(e)=>setMessage(e.target.value)}
-                placeholder="Enter Message"
-                ></textarea>
-
-                <button type="submit" disabled={!message}> Send
-                </button> 
-            </form>
-        </div>
-     );
-}
- 
 export default RoomChat;

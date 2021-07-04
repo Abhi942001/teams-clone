@@ -1,3 +1,8 @@
+body, html, .App, #root{
+  height: 100%;
+  width: 100%;
+}
+
 .App {
   text-align: center;
 }
@@ -35,4 +40,8 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.Content{
+  height: 100%;
 }

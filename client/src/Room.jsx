@@ -2,21 +2,19 @@ import { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import Peer from "simple-peer";
 import styled from "styled-components";
-// import RoomChat from "./components/MeetingRoom/RoomChat/RoomChat";
 import "./Room.css"
 import RoomChat from "./components/MeetingRoom/RoomChat/RoomChat";
 
 const Container = styled.div`
-    padding: 20px;
     display: flex;
-    height: 100vh;
-    width: 90%;
+    height: 100%;
+    width: 100%;
     margin: auto;
     flex-wrap: wrap;
 `;
 
 const StyledVideo = styled.video`
-    height: 40%;
+    height: 50%;
     width: 50%;
 `;
 
@@ -46,7 +44,7 @@ const Room = (props) => {
     const userVideo = useRef();
     const peersRef = useRef([]);
     const roomID = props.match.params.roomID;
-
+    
     useEffect(() => {
         socketRef.current = io.connect("http://localhost:8000");
         navigator.mediaDevices.getUserMedia({ video: videoConstraints, audio: false }).then(stream => {
@@ -113,14 +111,6 @@ const Room = (props) => {
         return peer;
     }
 
-    const handle=(e)=>{
-        if(e.target.value.length!==0){
-        const msg=e.target.value;
-            socketRef.current.emit("message",{msg,roomID});
-
-        }else
-       console.log("message value empty");
-    }
 
 
 
@@ -140,13 +130,9 @@ const Room = (props) => {
             
         </Container>
         <div className="chatRoom">
-                {/* <RoomChat socketRef={socketRef} roomID={roomID}/>
-                 */}
-                            <h5>Chat</h5>
+                            <h5>Meeting Chat</h5>
             <div className="mainChatWindow">
-                <ul className="messages">
 
-                </ul>
             </div>
                 <RoomChat roomID={roomID}/>
             </div>
