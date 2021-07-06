@@ -32,6 +32,7 @@ io.on("connection",socket=>{
         } else{
             users[roomID]= [socket.id];
         }
+
         socketToRoom[socket.id]=roomID;
         const usersInThisRoom = users[roomID].filter(id => id !== socket.id);
         
@@ -47,7 +48,7 @@ io.on("connection",socket=>{
         io.to(payload.callerID).emit("receiving returned signal",{signal:payload.signal, id:socket.id});
     });
 
-    socket.on("disconnect",()=>{
+    socket.on("disconnectPeer",()=>{
         const roomID=socketToRoom[socket.id];
         let room=users[roomID];
         if(room){

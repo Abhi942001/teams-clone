@@ -4,6 +4,9 @@ import Peer from "simple-peer";
 import styled from "styled-components";
 import "./Room.css"
 import RoomChat from "./components/MeetingRoom/RoomChat/RoomChat";
+import { useHistory } from "react-router";
+import {db} from "./firebase"
+import { useAuth } from "./contexts/AuthContext";
 
 const Container = styled.div`
     display: flex;
@@ -44,10 +47,13 @@ const Room = (props) => {
     const userVideo = useRef();
     const peersRef = useRef([]);
     const roomID = props.match.params.roomID;
+    const history=useHistory();
+    const {currentUser}=useAuth();
     
-    useEffect(() => {
+    useEffect( () => {
         socketRef.current = io.connect("http://localhost:8000");
-        navigator.mediaDevices.getUserMedia({ video: videoConstraints, audio: false }).then(stream => {
+        navigator.mediaDevices.getUserMedia({ video: true, audio: false }).then(stream => {
+            db.collection('user').doc(currentUser.uid).collection('rooms').doc(roomID).set({});
             userVideo.current.srcObject = stream;
             socketRef.current.emit("join room", roomID);
             socketRef.current.on("all users", users => {
@@ -61,6 +67,7 @@ const Room = (props) => {
                     peers.push(peer);
                 })
                 setPeers(peers);
+
             })
 
             socketRef.current.on("user joined", payload => {
@@ -75,7 +82,7 @@ const Room = (props) => {
 
             socketRef.current.on("receiving returned signal", payload => {
                 const item = peersRef.current.find(p => p.peerID === payload.id);
-                item.peer.signal(payload.signal);
+                item.peers.signal(payload.signal);
             });
         })
 
@@ -111,7 +118,10 @@ const Room = (props) => {
         return peer;
     }
 
-
+    const disconnectUser=()=>{
+        socketRef.current.emit("disconnectPeer");
+        history.push("/dashboard")
+    }
 
 
     return (
@@ -127,7 +137,9 @@ const Room = (props) => {
                         );
                     })}
             </div>
-            
+            <div className="diconnect">
+                <button onClick={disconnectUser}>Disconnect</button>
+            </div>
         </Container>
         <div className="chatRoom">
                             <h5>Meeting Chat</h5>

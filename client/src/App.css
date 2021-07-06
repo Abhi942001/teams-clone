@@ -3,43 +3,30 @@ body, html, .App, #root{
   width: 100%;
 }
 
-.App {
-  text-align: center;
+hr{
+  width: 100%;
+  border: none;
+  outline: none;
+  border-top:solid lightgray 1px;
+  margin: 0px 0px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.dashboard{
+  display: grid;
+  grid-template-rows: min-content auto;
+  height: 100%;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.dashboard-body{
+  display: grid;
+  grid-template-columns: 350px auto;
+  height: 100%;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.dashboardChatsPanel{
+  height: 100%;
+  padding: 20px 0px;
+  box-sizing: border-box;
+  background-color: #f0f0f0;
 }
 
 .Content{

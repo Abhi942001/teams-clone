@@ -16,7 +16,9 @@ const RoomChat = (props) => {
   useEffect(() => {
     if (db) {
       const unsubscribe = db
-        .collection(roomID)
+        .collection("rooms")
+        .doc(roomID)
+        .collection("messages")
         .orderBy("createdAt")
         .limit(100)
         .onSnapshot((querySnapshot) => {
@@ -37,7 +39,7 @@ const RoomChat = (props) => {
   const handleOnSubmit = (e) => {
     e.preventDefault();
     if (db) {
-      db.collection(roomID).add({
+      db.collection("rooms").doc(roomID).collection("messages").add({
         text: newMessage,
         createdAt: new Date(),
         userId: currentUser.uid,
@@ -65,7 +67,11 @@ const RoomChat = (props) => {
             placeholder="Type message..."
             underlined
           />
-          <IconButton type="submit" disabled={!newMessage} style={{marginLeft: "auto"}}>
+          <IconButton
+            type="submit"
+            disabled={!newMessage}
+            style={{ marginLeft: "auto" }}
+          >
             <Icon iconName="send"></Icon>
           </IconButton>
         </form>
