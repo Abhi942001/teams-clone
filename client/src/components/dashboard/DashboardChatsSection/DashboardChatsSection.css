@@ -1,0 +1,26 @@
+.chats-section {
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #f5f5f5;
+    display: grid;
+    grid-template-rows: auto max-content;
+    place-items: center;
+}
+
+
+.messages{
+    box-sizing: border-box;
+    padding: 40px 40px 0 40px;
+    height: 85vh;
+    overflow-y: auto;
+    overflow-x: visible;
+    width: 100%;
+}
+
+.chats-send{
+    box-sizing: border-box;
+    padding: 0px 40px;
+    width: 1000px;
+
+}

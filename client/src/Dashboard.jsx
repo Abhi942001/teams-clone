@@ -1,17 +1,16 @@
 import { useEffect, useState, useRef } from "react";
-import Button from "@material-ui/core/Button";
-import { useHistory } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
 import { db } from "./firebase";
 import DashboardNavigation from "./components/dashboard/DashboardNavigation/DashboardNavigation";
 import DashboardChatsPanel from "./components/dashboard/DashboardChatsPanel/DashboardChatsPanel";
+import DashboardChatsSection from "./components/dashboard/DashboardChatsSection/DashboardChatsSection";
+
 import { useAuth } from "./contexts/AuthContext";
 
 const Dashboard = () => {
-  const history = useHistory();
   const { currentUser } = useAuth();
   const unsubRef = useRef();
   const [rooms, setRooms] = useState({});
+  const [currentChat, setCurrentChat] = useState(null);
 
   useEffect(() => {
     async function fetchRooms() {
@@ -31,9 +30,10 @@ const Dashboard = () => {
               .orderBy("createdAt")
               .limit(100)
               .onSnapshot((querySnapshot) => {
-                const messages = querySnapshot.docs.map((message) =>
-                  message.data()
-                );
+                const messages = querySnapshot.docs.map((message) => ({
+                  ...message.data(),
+                  id: message.id,
+                }));
                 var newRooms;
                 setRooms((oldRooms) => {
                   newRooms = oldRooms;
@@ -55,35 +55,36 @@ const Dashboard = () => {
     return () => unsubscribe;
   }, [currentUser.uid]);
 
-  const CreateRoom = () => {
-    const roomID = uuidv4();
-    console.log(roomID);
-    let title = "Meeting with " + currentUser.displayName;
-    if (db) {
-      db.collection("rooms").doc(roomID).set({ title });
-    }
-    history.push(`/room/${roomID}`);
+  const getSelectedRoom = (roomID) => {
+    setCurrentChat((c) => roomID);
   };
 
+  const getMessages = () => {
+    let messages, roomKey;
+    if (rooms) {
+      roomKey = Object.keys(rooms).find((key) => {
+        return currentChat === key;
+      });
+
+      roomKey ? (messages = rooms[roomKey].messages) : (messages = null);
+    }
+    return { messages, roomKey };
+  };
   return (
     <div className="dashboard">
-      <DashboardNavigation></DashboardNavigation>
-
+      <DashboardNavigation />
       <div className="dashboard-body">
         <div className="dashboardChatsPanel">
-          <DashboardChatsPanel rooms={rooms} />
+          <DashboardChatsPanel
+            rooms={rooms}
+            getSelectedRoom={getSelectedRoom}
+            currentChat={currentChat}
+          />
         </div>
-        <div className="buttons">
-          <Button
-            variant="contained"
-            onClick={() => {
-              CreateRoom();
-            }}
-          >
-            {" "}
-            Create Meeting
-          </Button>
-        </div>
+        <DashboardChatsSection
+          currentChat={currentChat}
+          getMessages={getMessages}
+        />
       </div>
     </div>
   );

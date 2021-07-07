@@ -15,7 +15,7 @@ function App() {
     <AuthProvider>
       <RoomProvider>
 
-      <div className="App">
+      <div className="App ">
         <div className="Content">
           <Switch>
             {/* <PrivateRoute exact path="/Dashboard" component={Dashboard}/> */}

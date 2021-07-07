@@ -5,6 +5,10 @@
 .recent-chats{
 box-sizing: border-box;
 }
+.chat-panel-header{
+    display: flex;
+    justify-content: space-between;
+}
 
 .new-chat-button{
     padding: 10px 25px;
@@ -23,7 +27,6 @@ box-sizing: border-box;
     width: 100%;
     box-sizing: border-box;  
     padding: 10px 20px 10px 70px;
-    margin-bottom: 10px;
     cursor: pointer;
 }
 
@@ -63,5 +66,13 @@ box-sizing: border-box;
 .chat-preview-last-message{
     font-size: x-small;
     font-weight: 300;
+}
+
+.new-chat-icon{
+    background: #f0f0f0;
+    padding: 10px;
+    transform: scale(0.85) translateX(-15%);
+    border-radius: 100%;
+    margin-right: 10px;
 }
 
