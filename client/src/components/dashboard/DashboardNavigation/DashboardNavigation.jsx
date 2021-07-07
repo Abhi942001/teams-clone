@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { TextField } from "@fluentui/react/lib/TextField";
 import "./DashboardNavigation.css";
-import { IconButton } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
 import { Icon } from "@fluentui/react";
@@ -24,6 +23,7 @@ const DashboardNavigation = () => {
       history.push("/");
     } catch {
       setError("Failed to log out");
+      console.log(error);
     }
   }
 

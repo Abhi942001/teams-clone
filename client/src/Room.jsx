@@ -28,7 +28,7 @@ const Video = (props) => {
         props.peer.on("stream", stream => {
             ref.current.srcObject = stream;
         })
-    }, []);
+    }, [props.peer]);
 
     return (
         <StyledVideo playsInline autoPlay ref={ref} />
@@ -36,10 +36,7 @@ const Video = (props) => {
 }
 
 
-const videoConstraints = {
-    height: window.innerHeight ,
-    width: window.innerWidth 
-};
+
 
 const Room = (props) => {
     const [peers, setPeers] = useState([]);
@@ -49,11 +46,13 @@ const Room = (props) => {
     const roomID = props.match.params.roomID;
     const history=useHistory();
     const {currentUser}=useAuth();
+    const [muteBtnText,setMuteBtnText]=useState("mute");
+    const [VideoBtnText,setVideoBtnText]=useState("Turn off Video");
     
     useEffect( () => {
+        db.collection('user').doc(currentUser.uid).collection('rooms').doc(roomID).set({});
         socketRef.current = io.connect("http://localhost:8000");
-        navigator.mediaDevices.getUserMedia({ video: true, audio: false }).then(stream => {
-            db.collection('user').doc(currentUser.uid).collection('rooms').doc(roomID).set({});
+        navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
             userVideo.current.srcObject = stream;
             socketRef.current.emit("join room", roomID);
             socketRef.current.on("all users", users => {
@@ -82,11 +81,11 @@ const Room = (props) => {
 
             socketRef.current.on("receiving returned signal", payload => {
                 const item = peersRef.current.find(p => p.peerID === payload.id);
-                item.peers.signal(payload.signal);
+                item.peer.signal(payload.signal);
             });
         })
 
-    }, []);
+    }, [currentUser.uid, roomID]);
 
     function createPeer(userToSignal, callerID, stream) {
         const peer = new Peer({
@@ -123,6 +122,33 @@ const Room = (props) => {
         history.push("/dashboard")
     }
 
+    const muteAudio=()=>{
+        const enabled= userVideo.current.srcObject.getAudioTracks()[0].enabled;
+
+        if(enabled){
+            userVideo.current.srcObject.getAudioTracks()[0].enabled=false;
+            setMuteBtnText("unmute");
+            
+        }else{
+            userVideo.current.srcObject.getAudioTracks()[0].enabled=true;
+            setMuteBtnText("mute")
+            
+        }
+    }
+    const videoControl=()=>{
+        const enabled= userVideo.current.srcObject.getVideoTracks()[0].enabled;
+
+        if(enabled){
+            userVideo.current.srcObject.getVideoTracks()[0].enabled=false;
+            setVideoBtnText("turn on Video");
+            
+        }else{
+            userVideo.current.srcObject.getVideoTracks()[0].enabled=true;
+            setVideoBtnText("Turn Off Video")
+            
+        }
+    }
+
 
     return (
         <div className="Room">
@@ -139,6 +165,12 @@ const Room = (props) => {
             </div>
             <div className="diconnect">
                 <button onClick={disconnectUser}>Disconnect</button>
+            </div>
+            <div>
+                <button onClick={muteAudio}>{muteBtnText}</button>
+            </div>
+            <div>
+                <button onClick={videoControl}>{VideoBtnText}</button>
             </div>
         </Container>
         <div className="chatRoom">

@@ -20,7 +20,6 @@ const users={};
 const socketToRoom={};
 
 io.on("connection",socket=>{
-    
     socket.on("join room",roomID=>{
         if(users[roomID]){
             const length=users[roomID].length;
@@ -32,7 +31,7 @@ io.on("connection",socket=>{
         } else{
             users[roomID]= [socket.id];
         }
-
+        
         socketToRoom[socket.id]=roomID;
         const usersInThisRoom = users[roomID].filter(id => id !== socket.id);
         
@@ -66,6 +65,7 @@ io.on("connection",socket=>{
 
    
 });
+
 
 server.listen(port,()=>{
     console.log(`server is running on port ${port}`);

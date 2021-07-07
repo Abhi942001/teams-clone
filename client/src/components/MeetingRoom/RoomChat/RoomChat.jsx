@@ -31,7 +31,7 @@ const RoomChat = (props) => {
 
       return unsubscribe;
     }
-  }, [db]);
+  }, [roomID]);
 
   const handleOnChange = (e) => {
     setNewMessage(e.target.value);

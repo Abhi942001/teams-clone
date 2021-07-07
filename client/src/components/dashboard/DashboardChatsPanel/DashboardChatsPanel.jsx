@@ -1,7 +1,6 @@
 import "./DashboardChatsPanel.css";
 import { Icon } from "@fluentui/react/lib/Icon";
 import { useAuth } from "../../../contexts/AuthContext";
-import { useRoom } from "../../../contexts/roomContext";
 
 const ChatPreview = ({ chat, id }) => {
   const doMsgsExist = chat.messages.length > 0 ? true : false;
@@ -20,7 +19,7 @@ const ChatPreview = ({ chat, id }) => {
     <div className="chat-preview">
       <div className="chat-preview-icon">
         {chat.icon ? (
-          <img src={chat.icon} />
+          <img src={chat.icon} alt="Profile Icon"/>
         ) : (
           <Icon iconName="MessageFill" style={{ transform: "scale(0.8)" }} />
         )}
