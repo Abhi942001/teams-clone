@@ -10,8 +10,8 @@ const DashboardNavigation = () => {
     "Search..."
   );
   const [error, setError] = useState("");
-  
-  const { logout } = useAuth();
+
+  const { logout, currentUser } = useAuth();
   const [backColor, setBackColor] = useState("#e0e0ed");
   const history = useHistory();
 
@@ -30,26 +30,45 @@ const DashboardNavigation = () => {
   return (
     <div className="navbar">
       <div>
-
-      <TextField
-        style={{ background: backColor }}
-        placeholder={searchPlaceholderText}
-        borderless
-        onFocus={() => {
-          setSearchPlaceholderText("Search for people and chats.");
-          setBackColor("white");
-        }}
-        onBlur={() => {
-          setSearchPlaceholderText("Search...");
-          setBackColor("#e0e0ed");
-        }}
+        <TextField
+          style={{ background: backColor }}
+          placeholder={searchPlaceholderText}
+          borderless
+          onFocus={() => {
+            setSearchPlaceholderText("Search for people and chats.");
+            setBackColor("white");
+          }}
+          onBlur={() => {
+            setSearchPlaceholderText("Search...");
+            setBackColor("#e0e0ed");
+          }}
         />
-      
-    </div>
-    <div className="logout-icons" >
-        <Icon iconName="SignOut" onClick={handleLogout} style={{width:"10px"}}></Icon>
-    
-    </div> 
+      </div>
+      <div className="logout-icons">
+        <Icon iconName="SignOut" onClick={handleLogout}></Icon>
+      </div>
+      <div
+        style={{
+          borderRadius: "100%",
+          width: "32px",
+          height: "32px",
+          display: "grid",
+          placeItems: "center",
+          backgroundColor: "#999be1",
+        }}
+      >
+        <div
+          style={{
+            width: "min-content",
+            color: "#f5f5f5",
+            marginLeft: "0px",
+            fontWeight: "bold",
+          }}
+        >
+          {currentUser.displayName[0]}
+          {currentUser.displayName.split(" ")[1][0]}
+        </div>
+      </div>
     </div>
   );
 };

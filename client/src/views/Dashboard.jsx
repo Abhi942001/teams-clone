@@ -1,10 +1,10 @@
 import { useEffect, useState, useRef } from "react";
-import { db } from "./firebase";
-import DashboardNavigation from "./components/dashboard/DashboardNavigation/DashboardNavigation";
-import DashboardChatsPanel from "./components/dashboard/DashboardChatsPanel/DashboardChatsPanel";
-import DashboardChatsSection from "./components/dashboard/DashboardChatsSection/DashboardChatsSection";
+import { db } from "../firebase";
+import DashboardNavigation from "../components/dashboard/DashboardNavigation/DashboardNavigation";
+import DashboardChatsPanel from "../components/dashboard/DashboardChatsPanel/DashboardChatsPanel";
+import DashboardChatsSection from "../components/dashboard/DashboardChatsSection/DashboardChatsSection";
 
-import { useAuth } from "./contexts/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 
 const Dashboard = () => {
   const { currentUser } = useAuth();
@@ -13,6 +13,9 @@ const Dashboard = () => {
   const [currentChat, setCurrentChat] = useState(null);
 
   useEffect(() => {
+    db.collection("user")
+      .doc(currentUser.uid)
+      .set({ displayName: currentUser.displayName });
     async function fetchRooms() {
       const unsubscribe1 = db
         .collection("user")
@@ -84,6 +87,7 @@ const Dashboard = () => {
         <DashboardChatsSection
           currentChat={currentChat}
           getMessages={getMessages}
+          getSelectedRoom={getSelectedRoom}
         />
       </div>
     </div>

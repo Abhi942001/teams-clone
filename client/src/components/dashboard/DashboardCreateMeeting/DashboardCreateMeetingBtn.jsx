@@ -6,26 +6,26 @@ import { Icon } from "@fluentui/react/lib/Icon";
 import { useAuth } from "../../../contexts/AuthContext";
 import "./DashboardCreateMeetingBtn.css";
 
-
 const DashboardCreateMeetingBtn = () => {
-    const history=useHistory();
-    const {currentUser}=useAuth();
+  const history = useHistory();
+  const { currentUser } = useAuth();
 
-    const CreateRoom = () => {
-        const roomID = uuidv4();
-        console.log(roomID);
-        let title = "Meeting with " + currentUser.displayName;
-        if (db) {
-          db.collection("rooms").doc(roomID).set({ title });
-        }
-        history.push(`/room/${roomID}`);
-      };
+  const CreateRoom = () => {
+    const roomID = uuidv4();
+    console.log(roomID);
+    let title = "Meeting with " + currentUser.displayName;
+    if (db) {
+      db.collection("rooms").doc(roomID).set({ title });
+    }
+    history.push(`/room/${roomID}`);
+  };
 
   return (
     <div className="dashboardCreateMeeting">
       <IconButton
         variant="contained"
         className="create-meeting-btn"
+        style={{ borderRadius: "100%" }}
         onClick={() => {
           CreateRoom();
         }}

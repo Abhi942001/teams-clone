@@ -52,6 +52,7 @@ const RoomChat = (props) => {
 
   return (
     <div className="RoomChat">
+      Meeting Chat
       <div className="messages">
         <div className="messages-container">
           {messages.map((message) => (
@@ -75,7 +76,7 @@ const RoomChat = (props) => {
           >
             <Icon iconName="send"></Icon>
           </IconButton>
-          <Picker />
+          {/* <Picker /> */}
         </form>
       </div>
     </div>

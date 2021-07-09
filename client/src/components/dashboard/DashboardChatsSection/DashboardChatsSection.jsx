@@ -1,19 +1,26 @@
-import { useState, useEffect } from "react";
 import MessagesPart from "./MessagesPart";
+import NewChat from "./NewChat";
+import Picker from "emoji-picker-react";
+import "./DashboardChatsSection.css";
+import { useState, useEffect } from "react";
 import { TextField } from "@fluentui/react";
-import { IconButton } from "@fluentui/react/lib/Button";
+import { DefaultButton, IconButton } from "@fluentui/react/lib/Button";
 import { Icon } from "@fluentui/react/lib/Icon";
 import { db } from "../../../firebase";
 import { useAuth } from "../../../contexts/AuthContext";
-import Picker from "emoji-picker-react";
-import "./DashboardChatsSection.css";
+import { useHistory } from "react-router";
 
-const DashBoardChatsSection = ({ getMessages, currentChat }) => {
+const DashBoardChatsSection = ({
+  getMessages,
+  currentChat,
+  getSelectedRoom,
+}) => {
   const { messages, roomKey } = getMessages();
   const { currentUser } = useAuth();
   const [newMessage, setNewMessage] = useState("");
   var endOfMessages;
   var [showEmojiPanel, setShowEmojiPanel] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     if (endOfMessages) endOfMessages.scrollIntoView();
@@ -38,10 +45,24 @@ const DashBoardChatsSection = ({ getMessages, currentChat }) => {
     setNewMessage((previousValue) => previousValue + emojiObject.emoji);
   };
 
+  const joinMeeting = () => {
+    history.push(`/room/${roomKey}`);
+  };
+
   return (
     <>
-      {currentChat !== null && (
+      {currentChat === null ? (
+        <NewChat getSelectedRoom={getSelectedRoom} />
+      ) : (
         <div className="chats-section">
+          <div className="joinBtn">
+            <DefaultButton
+              onClick={joinMeeting}
+              style={{ backgroundColor: "#6264a7", color: "white" }}
+            >
+              <Icon iconName="video" /> &nbsp; Join Video Call
+            </DefaultButton>
+          </div>
           <div className="messages">
             {messages && (
               <>
@@ -98,7 +119,7 @@ const DashBoardChatsSection = ({ getMessages, currentChat }) => {
             </form>
           </div>
         </div>
-      )}{" "}
+      )}
     </>
   );
 };

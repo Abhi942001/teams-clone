@@ -1,0 +1,40 @@
+.signIn {
+  display: grid;
+  grid-template-columns: 50% 50%;
+
+  background-color: #f5f5f5;
+  place-items: center;
+}
+@media only screen and (max-width: 600px) {
+  .signIn {
+    grid-template-columns: auto;
+    grid-template-rows: 80% 80%;
+  }
+}
+.signIn-content-content {
+  align-self: center;
+  padding: 40px 8.125rem 40px 7.025rem;
+  text-align: left;
+}
+
+.signIn-content-heading {
+  text-align: left;
+  margin-bottom: 3px;
+  font-size: 43px;
+  color: #4b53bc;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+}
+.signIn-content-para {
+  text-align: left;
+  font-size: 30px;
+  font-weight: 400;
+}
+
+.signIn-image-div {
+  height: 100%;
+}
+
+.signIn-image {
+  max-width: 100%;
+}

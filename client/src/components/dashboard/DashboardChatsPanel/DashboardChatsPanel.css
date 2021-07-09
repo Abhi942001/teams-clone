@@ -1,78 +1,82 @@
-.chats-panel{
-    width: 100%;
-    height: 100%;
+.chats-panel {
+  width: 100%;
+  height: 100%;
 }
-.recent-chats{
-box-sizing: border-box;
+.recent-chats {
+  box-sizing: border-box;
+  height: 80vh;
+  overflow-y: auto;
 }
-.chat-panel-header{
-    display: flex;
-    justify-content: space-between;
-}
-
-.new-chat-button{
-    padding: 10px 25px;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    background: #ffffff;
-    width: 100%;
-    cursor: pointer;
+.chats-panel-header {
+  display: flex;
+  justify-content: space-between;
 }
 
-
-.chat-preview{
-    position: relative;
-    height: min-content; 
-    width: 100%;
-    box-sizing: border-box;  
-    padding: 10px 20px 10px 70px;
-    cursor: pointer;
+.new-chat-button {
+  padding: 10px 25px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  width: 100%;
+  cursor: pointer;
 }
 
-.chat-preview:hover{
-    background-color: #f5f5f5;
+.chat-preview {
+  position: relative;
+  height: min-content;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 20px 10px 70px;
+  cursor: pointer;
 }
 
-.chat-preview-icon{
-    position: absolute;
-    left: 25px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 28px;
-    height: 28px;
-
-    display: grid;
-    place-items: center;
-    
-    border-radius: 100%;
-    background-color: #6264a7;
-
-    box-sizing: border-box;
+.chat-preview:hover {
+  background-color: #f5f5f5;
 }
 
-.chat-preview-icon > i{
-   color: #e3e4ef;
+.chat-preview-icon {
+  position: absolute;
+  left: 25px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 100%;
+  background-color: #6264a7;
+
+  box-sizing: border-box;
 }
 
-.chat-preview-title-group{
-    font-size: small;
-    font-weight: 400;
-    display: flex;
-    justify-content: space-between;
+.chat-preview-icon > i {
+  color: #e3e4ef;
 }
 
-
-.chat-preview-last-message{
-    font-size: x-small;
-    font-weight: 300;
+.chat-preview-title-group {
+  font-size: small;
+  font-weight: 400;
+  display: flex;
+  justify-content: space-between;
 }
 
-.new-chat-icon{
-    background: #f0f0f0;
-    padding: 10px;
-    transform: scale(0.85) translateX(-15%);
-    border-radius: 100%;
-    margin-right: 10px;
+.chat-preview-last-message {
+  font-size: x-small;
+  font-weight: 300;
 }
 
+.new-chat-icon {
+  background: #f0f0f0;
+  padding: 10px;
+  transform: scale(0.85) translateX(-15%);
+  border-radius: 100%;
+  margin-right: 10px;
+}
+
+.chat-panel-header-rightBtn {
+  display: flex;
+  flex-direction: row;
+}
