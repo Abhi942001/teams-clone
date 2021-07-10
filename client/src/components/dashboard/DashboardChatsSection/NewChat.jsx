@@ -29,7 +29,6 @@ const NewChat = ({ getSelectedRoom }) => {
 
   const onChange = useCallback(
     (event, option) => {
-      console.log(option);
       if (option) {
         let selected = option.selected;
         setSelectedKeys((prevSelectedKeys) =>
@@ -37,7 +36,6 @@ const NewChat = ({ getSelectedRoom }) => {
             ? [...prevSelectedKeys, option.key]
             : prevSelectedKeys.filter((k) => k !== option.key)
         );
-        console.log(selectedKeys);
       }
     },
     [selectedKeys]

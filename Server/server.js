@@ -64,8 +64,6 @@ io.on("connection", (socket) => {
 
   socket.on("message", (payload) => {
     const roomID = socketToRoom[socket.id];
-    console.log("messgae");
-    console.log(roomID);
     io.to(roomID).emit("createMessage", payload.msg);
   });
 });

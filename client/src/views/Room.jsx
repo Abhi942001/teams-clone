@@ -1,12 +1,23 @@
-import { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import Peer from "simple-peer";
 import styled from "styled-components";
-import "./Room.css";
-import RoomChat from "../components/MeetingRoom/RoomChat/RoomChat";
+
+import { useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router";
-import { db } from "../firebase";
 import { useAuth } from "../contexts/AuthContext";
+
+import { db } from "../firebase";
+import {
+  DefaultButton,
+  FontIcon,
+  PrimaryButton,
+  Toggle,
+  Icon,
+  IconButton,
+} from "@fluentui/react";
+import RoomChat from "../components/MeetingRoom/RoomChat/RoomChat";
+
+import "./Room.css";
 
 const StyledVideo = styled.video`
   position: absolute;
@@ -45,7 +56,6 @@ const Video = (props) => {
   useEffect(() => {
     props.peer.on("stream", (stream) => {
       ref.current.srcObject = stream;
-      // console.log(stream.getVideoTracks());
     });
   }, [props.peer]);
 
@@ -81,8 +91,8 @@ const Room = (props) => {
   const roomID = props.match.params.roomID;
   const history = useHistory();
   const { currentUser } = useAuth();
-  const [muteBtnText, setMuteBtnText] = useState("mute");
-  const [VideoBtnText, setVideoBtnText] = useState("Turn off Video");
+  const [isMuted, setMuted] = useState(false);
+  const [isVideoOff, setVideo] = useState(false);
 
   useEffect(() => {
     db.collection("user")
@@ -131,14 +141,6 @@ const Room = (props) => {
             userID: currentUser.uid,
           });
           setPeers([...peersRef.current]);
-          // const peerObj = {
-          //   peer,
-          //   peerID: payload.callerID,
-          //   displayName: currentUser.displayName,
-          // };
-
-          // setPeers((users) => [...users, peerObj]);
-          // setPeers([...peersRef.current]);
         });
 
         socketRef.current.on("receiving returned signal", (payload) => {
@@ -147,7 +149,6 @@ const Room = (props) => {
         });
 
         socketRef.current.on("user-left", (id) => {
-          console.log("user destroyed");
           const peerObj = peersRef.current.find((p) => p.peerID === id);
           if (peerObj) {
             peerObj.peer.destroy();
@@ -202,35 +203,25 @@ const Room = (props) => {
   };
 
   const muteAudio = () => {
-    // if (userVideo.current) {
     const enabled = userVideo.current.srcObject.getAudioTracks()[0].enabled;
 
     if (enabled) {
       userVideo.current.srcObject.getAudioTracks()[0].enabled = false;
-      setMuteBtnText("unmute");
     } else {
       userVideo.current.srcObject.getAudioTracks()[0].enabled = true;
-      setMuteBtnText("mute");
     }
-    // }
   };
   const videoControl = () => {
-    // if (userVideo.current) {
     const enabled = userVideo.current.srcObject.getVideoTracks()[0].enabled;
 
     if (enabled) {
       userVideo.current.srcObject.getVideoTracks()[0].enabled = false;
-      setVideoBtnText("turn on Video");
     } else {
       userVideo.current.srcObject.getVideoTracks()[0].enabled = true;
-      setVideoBtnText("Turn Off Video");
     }
-    // }
   };
 
-  const isSelfVideoOn = userVideo.current
-    ? userVideo.current.srcObject.getVideoTracks()[0].enabled
-    : false;
+  const isSelfVideoOn = true;
 
   const videoCoverStyles = {
     display: isSelfVideoOn ? "none" : "grid",
@@ -245,7 +236,6 @@ const Room = (props) => {
 
   return (
     <div className="Room">
-      {/* <Container> */}
       <div className="RoomVideo">
         <div style={videoContainerStyles}>
           <StyledVideo muted ref={userVideo} autoPlay playsInline />
@@ -266,16 +256,61 @@ const Room = (props) => {
           );
         })}
       </div>
-      {/* </Container> */}
+
       <div className="meeting-controls">
-        <div className="diconnect">
-          <button onClick={disconnectUser}>Disconnect</button>
+        <div className="icon-group">
+          <button
+            onClick={() => {
+              setMuted((prev) => !prev);
+              return muteAudio();
+            }}
+            className="toggle-button"
+          >
+            <FontIcon
+              iconName={isMuted ? "MicOff" : "Microphone"}
+              style={{
+                color: isMuted ? "lightcoral" : "white",
+                fontSize: "20px",
+                cursor: "pointer",
+              }}
+            ></FontIcon>
+          </button>
         </div>
-        <div>
-          <button onClick={muteAudio}>{muteBtnText}</button>
+        <div className="icon-group">
+          <button
+            onClick={() => {
+              setVideo((prev) => !prev);
+              return videoControl();
+            }}
+            className="toggle-button"
+          >
+            <FontIcon
+              iconName={isVideoOff ? "VideoOff" : "Video"}
+              style={{
+                color: isVideoOff ? "lightcoral" : "white",
+                fontSize: "20px",
+                cursor: "pointer",
+              }}
+            ></FontIcon>
+          </button>
         </div>
-        <div>
-          <button onClick={videoControl}>{VideoBtnText}</button>
+        <div className="icon-group">
+          <button
+            className="toggle-button disconnect"
+            style={{
+              color: "#f5f5f5",
+            }}
+            onClick={disconnectUser}
+          >
+            <FontIcon
+              style={{
+                color: "white",
+                fontSize: "20px",
+                cursor: "pointer",
+              }}
+              iconName="DeclineCall"
+            ></FontIcon>
+          </button>
         </div>
       </div>
       <div className="chatRoom">

@@ -1,13 +1,53 @@
 .Room {
   display: grid;
   grid-template-columns: auto 25%;
-  background-color: grey;
+  background-color: #0e0e0e;
   height: 100%;
 }
 
 .meeting-controls {
   position: absolute;
-  top: 0px;
+  width: max-content;
+  padding: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  background-color: rgba(128, 128, 128, 0.5);
+  /* border: solid 1px #f5f5f5; */
+  border-radius: 4px;
+  align-items: center;
+}
+
+.icon-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: max-content;
+  margin: 0px 2.5px;
+}
+
+.toggle-button {
+  user-select: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: transparent;
+  border: solid 1px #f5f5f52d;
+  outline: none;
+  border-radius: 4px;
+  padding: 8px;
+  width: 40px;
+  height: 40px;
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  transition: background 300ms;
+}
+
+.toggle-button:hover {
+  background: rgba(179, 177, 177, 0.5);
 }
 
 .RoomVideo {
@@ -34,4 +74,12 @@
 .chatRoom h5 {
   padding-left: 30px;
   text-align: left;
+}
+
+.disconnect {
+  background: lightcoral;
+}
+
+.disconnect:hover {
+  background: rgb(241, 69, 69);
 }

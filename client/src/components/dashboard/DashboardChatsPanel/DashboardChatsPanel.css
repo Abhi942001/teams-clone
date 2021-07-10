@@ -8,8 +8,11 @@
   overflow-y: auto;
 }
 .chats-panel-header {
+  font-size: 24px;
+  font-weight: 600;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .new-chat-button {
@@ -79,4 +82,36 @@
 .chat-panel-header-rightBtn {
   display: flex;
   flex-direction: row;
+}
+
+.panel-top-buttons {
+  user-select: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  background: #6264a7;
+  border: none;
+  outline: none;
+  border-radius: 100%;
+  padding: 4px;
+  margin: 5px 3px;
+  width: 36px;
+  height: 36px;
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  transition: background 300ms;
+}
+
+.panel-top-buttons:hover {
+  background: #6264a7dc;
+}
+
+.panel-video-button {
+  color: rgba(0, 0, 0, 0.856);
+  background: white;
+}
+
+.panel-video-button:hover {
+  background: rgb(202, 202, 202);
 }

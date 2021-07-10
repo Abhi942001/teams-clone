@@ -1,10 +1,10 @@
 import { useEffect, useState, useRef } from "react";
+import { useAuth } from "../contexts/AuthContext";
+
 import { db } from "../firebase";
 import DashboardNavigation from "../components/dashboard/DashboardNavigation/DashboardNavigation";
 import DashboardChatsPanel from "../components/dashboard/DashboardChatsPanel/DashboardChatsPanel";
 import DashboardChatsSection from "../components/dashboard/DashboardChatsSection/DashboardChatsSection";
-
-import { useAuth } from "../contexts/AuthContext";
 
 const Dashboard = () => {
   const { currentUser } = useAuth();

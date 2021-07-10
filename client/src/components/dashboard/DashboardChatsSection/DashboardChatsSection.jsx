@@ -99,7 +99,6 @@ const DashBoardChatsSection = ({
               <IconButton
                 onClick={() => {
                   setShowEmojiPanel((oldVal) => !oldVal);
-                  console.log(showEmojiPanel);
                 }}
               >
                 <Icon iconName="emoji"></Icon>

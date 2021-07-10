@@ -1,15 +1,19 @@
 import { useAuth } from "../../../contexts/AuthContext";
 
-
 const MessagesPart = ({ msg }) => {
   const { currentUser } = useAuth();
   const color = { self: "#e9eaf6", others: "#ffffff" };
+
+  const timestamp = msg.createdAt
+    .toDate()
+    .toLocaleTimeString()
+    .replace(/(.*)\D\d+/, "$1");
 
   return currentUser.uid === msg.userId ? (
     <div
       style={{
         background: color.self,
-        width: "70%",
+        maxWidth: "70%",
         marginLeft: "auto",
         marginBottom: "8px",
         borderRadius: "4px",
@@ -19,10 +23,10 @@ const MessagesPart = ({ msg }) => {
         fontSize: "1rem",
         fontWeight: "light",
         overflowWrap: "break-word",
-        wordBreak: "break-all"
+        wordBreak: "break-all",
       }}
     >
-      <div style={{fontWeight: "500", fontSize: "small"}}>{msg.createdAt.toDate().toLocaleTimeString()}</div>
+      <div style={{ fontWeight: "500", fontSize: "small" }}>{timestamp}</div>
       {msg.text}
     </div>
   ) : (
@@ -40,7 +44,7 @@ const MessagesPart = ({ msg }) => {
         fontSize: "1rem",
         fontWeight: "light",
         overflowWrap: "break-word",
-        wordBreak: "break-all"
+        wordBreak: "break-all",
       }}
     >
       <div
@@ -56,13 +60,13 @@ const MessagesPart = ({ msg }) => {
           display: "grid",
           placeItems: "center",
           fontSize: "small",
-          fontWeight: "500"
+          fontWeight: "500",
         }}
       >
-          {msg.displayName.split(" ")[0][0] + msg.displayName.split(" ")[1][0]}
+        {msg.displayName.split(" ")[0][0] + msg.displayName.split(" ")[1][0]}
       </div>
-      <div style={{ fontSize: "small",  fontWeight: "500"}}>
-        {msg.displayName} {msg.createdAt.toDate().toLocaleTimeString()}
+      <div style={{ fontSize: "small", fontWeight: "500" }}>
+        {msg.displayName} {timestamp}
       </div>
       {msg.text}
     </div>

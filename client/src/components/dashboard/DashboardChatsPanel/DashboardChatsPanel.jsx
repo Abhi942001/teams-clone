@@ -1,5 +1,5 @@
 import "./DashboardChatsPanel.css";
-import { Icon, IconButton } from "@fluentui/react/lib/";
+import { FontIcon, IconButton, Icon, Tooltip } from "@fluentui/react/lib/";
 import { useAuth } from "../../../contexts/AuthContext";
 import DashboardCreateMeetingBtn from "../DashboardCreateMeeting/DashboardCreateMeetingBtn";
 
@@ -63,9 +63,12 @@ const DashboardChatsPanel = ({ rooms, getSelectedRoom, currentChat }) => {
           <div className="chat-panel-header-rightBtn">
             <DashboardCreateMeetingBtn />
             <div onClick={() => getSelectedRoom(null)}>
-              <IconButton>
-                <Icon iconName="chat"></Icon>
-              </IconButton>
+              <button className="panel-top-buttons">
+                <FontIcon
+                  style={{ fontSize: "16px" }}
+                  iconName="chat"
+                ></FontIcon>
+              </button>
             </div>
           </div>
         </div>

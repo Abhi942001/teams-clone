@@ -51,9 +51,9 @@ const RoomChat = (props) => {
   };
 
   return (
-    <div className="RoomChat">
-      Meeting Chat
-      <div className="messages">
+    <div className="MeetingChat">
+      <h4>Meeting Chat</h4>
+      <div>
         <div className="messages-container">
           {messages.map((message) => (
             <MessagesPart msg={message} key={message.id} />

@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 import { db } from "../../../firebase";
 import { useHistory } from "react-router-dom";
 import { IconButton } from "@fluentui/react";
-import { Icon } from "@fluentui/react/lib/Icon";
+import { FontIcon } from "@fluentui/react/lib/Icon";
 import { useAuth } from "../../../contexts/AuthContext";
 import "./DashboardCreateMeetingBtn.css";
 
@@ -12,7 +12,7 @@ const DashboardCreateMeetingBtn = () => {
 
   const CreateRoom = () => {
     const roomID = uuidv4();
-    console.log(roomID);
+
     let title = "Meeting with " + currentUser.displayName;
     if (db) {
       db.collection("rooms").doc(roomID).set({ title });
@@ -22,16 +22,15 @@ const DashboardCreateMeetingBtn = () => {
 
   return (
     <div className="dashboardCreateMeeting">
-      <IconButton
-        variant="contained"
-        className="create-meeting-btn"
+      <button
+        className="panel-video-button panel-top-buttons"
         style={{ borderRadius: "100%" }}
         onClick={() => {
           CreateRoom();
         }}
       >
-        <Icon iconName="Video"></Icon>
-      </IconButton>
+        <FontIcon style={{ fontSize: "20px" }} iconName="Video"></FontIcon>
+      </button>
     </div>
   );
 };
