@@ -2,7 +2,7 @@
     "scripts": {
         "prepare-client": "cd client && yarn install && yarn build ",
         "prepare-server": "cd server && yarn install",
-        "heroku-postbuild": "yarn prepare-client && yarn prepare-server",
+        "heroku-postbuild": "yarn prepare-server && yarn prepare-client ",
         "start": "cd server && yarn start"
     },
 
