@@ -17,9 +17,9 @@ const SignIn = () => {
   async function handleLogin() {
     await login();
     console.log("sign In");
-    db.collection("user")
-      .doc(currentUser.uid)
-      .set({ displayName: currentUser.displayName });
+    // db.collection("user")
+    //   .doc(currentUser.uid)
+    //   .set({ displayName: currentUser.displayName });
     history.push("/Dashboard");
   }
 
