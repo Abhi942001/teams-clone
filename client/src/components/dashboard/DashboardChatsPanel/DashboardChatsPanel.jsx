@@ -1,6 +1,9 @@
 import "./DashboardChatsPanel.css";
-import { FontIcon, IconButton, Icon, Tooltip } from "@fluentui/react/lib/";
+
 import { useAuth } from "../../../contexts/AuthContext";
+import { useId } from '@fluentui/react-hooks';
+
+import { FontIcon, IconButton, Icon, TooltipHost } from "@fluentui/react/lib/";
 import DashboardCreateMeetingBtn from "../DashboardCreateMeeting/DashboardCreateMeetingBtn";
 
 const ChatPreview = ({ chat, id, getSelectedRoom, isSelected }) => {
@@ -55,20 +58,32 @@ const ChatPreview = ({ chat, id, getSelectedRoom, isSelected }) => {
 };
 
 const DashboardChatsPanel = ({ rooms, getSelectedRoom, currentChat }) => {
+
+  // const tooltipId=useId('tooltip')
   return (
     <div className="chats-panel">
       <div className="chats-panel-header">
         <div style={{ padding: "0px 20px 10px" }}>Chat</div>
         <div>
           <div className="chat-panel-header-rightBtn">
+            <TooltipHost
+            content="Create Video Meeting"
+            
+            >
             <DashboardCreateMeetingBtn />
+            </TooltipHost>
             <div onClick={() => getSelectedRoom(null)}>
+              <TooltipHost
+              content="Create New Chat"
+              >
+
               <button className="panel-top-buttons">
                 <FontIcon
                   style={{ fontSize: "16px" }}
                   iconName="chat"
-                ></FontIcon>
+                  ></FontIcon>
               </button>
+              </TooltipHost>
             </div>
           </div>
         </div>

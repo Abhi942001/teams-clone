@@ -14,6 +14,7 @@ import {
   Toggle,
   Icon,
   IconButton,
+  TooltipHost,
 } from "@fluentui/react";
 import RoomChat from "../components/MeetingRoom/RoomChat/RoomChat";
 
@@ -104,13 +105,14 @@ const Room = (props) => {
     db.collection("user")
       .doc(currentUser.uid)
       .set({ displayName: currentUser.displayName });
-    socketRef.current = io.connect("/");
+    socketRef.current = io.connect("http://localhost:8000");
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
       .then((stream) => {
         userVideo.current.srcObject = stream;
-        socketRef.current.emit("join room", { roomID, uid: currentUser.uid });
+        socketRef.current.emit("join room", roomID);
         socketRef.current.on("all users", (users) => {
+          
           const peers = [];
           users.forEach((userID) => {
             const peer = createPeer(userID, socketRef.current.id, stream);
@@ -156,11 +158,16 @@ const Room = (props) => {
           const peers = peersRef.current.filter((p) => p.peerID !== id);
           peersRef.current = peers;
           setPeers(peers);
-        });
+        })
       })
       .catch(() => {
         alert("Please Give Access to Camera and Microphone!");
       });
+      
+      return ()=>{
+        socketRef.current.disconnect();
+      }
+
   }, []);
 
   function createPeer(userToSignal, callerID, stream) {
@@ -199,6 +206,7 @@ const Room = (props) => {
 
   const disconnectUser = () => {
     socketRef.current.emit("disconnectPeer");
+
     history.push("/dashboard");
   };
 
@@ -210,6 +218,7 @@ const Room = (props) => {
     } else {
       userVideo.current.srcObject.getAudioTracks()[0].enabled = true;
     }
+    
   };
   const videoControl = () => {
     const enabled = userVideo.current.srcObject.getVideoTracks()[0].enabled;
@@ -259,6 +268,7 @@ const Room = (props) => {
 
       <div className="meeting-controls">
         <div className="icon-group">
+        <TooltipHost content="Audio">
           <button
             onClick={() => {
               setMuted((prev) => !prev);
@@ -275,15 +285,18 @@ const Room = (props) => {
               }}
             ></FontIcon>
           </button>
+          </TooltipHost>
         </div>
         <div className="icon-group">
+          <TooltipHost content="Video">
+
           <button
             onClick={() => {
               setVideo((prev) => !prev);
               return videoControl();
             }}
             className="toggle-button"
-          >
+            >
             <FontIcon
               iconName={isVideoOff ? "VideoOff" : "Video"}
               style={{
@@ -291,10 +304,12 @@ const Room = (props) => {
                 fontSize: "20px",
                 cursor: "pointer",
               }}
-            ></FontIcon>
+              ></FontIcon>
           </button>
+              </TooltipHost>
         </div>
         <div className="icon-group">
+        <TooltipHost content="Disconnect">
           <button
             className="toggle-button disconnect"
             style={{
@@ -311,6 +326,7 @@ const Room = (props) => {
               iconName="DeclineCall"
             ></FontIcon>
           </button>
+          </TooltipHost>
         </div>
       </div>
       <div className="chatRoom">

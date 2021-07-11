@@ -3,7 +3,7 @@ import { TextField } from "@fluentui/react/lib/TextField";
 import "./DashboardNavigation.css";
 import { useHistory } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
-import { Icon } from "@fluentui/react";
+import { Icon, TooltipHost } from "@fluentui/react";
 
 const DashboardNavigation = () => {
   const [searchPlaceholderText, setSearchPlaceholderText] = useState(
@@ -44,9 +44,11 @@ const DashboardNavigation = () => {
           }}
         />
       </div>
+      <TooltipHost content="Logout">
       <div className="logout-icons">
         <Icon iconName="SignOut" onClick={handleLogout}></Icon>
       </div>
+      </TooltipHost>
       <div
         style={{
           borderRadius: "100%",
@@ -57,6 +59,8 @@ const DashboardNavigation = () => {
           backgroundColor: "#999be1",
         }}
       >
+        <TooltipHost content={currentUser.displayName}>
+
         <div
           style={{
             width: "min-content",
@@ -64,10 +68,11 @@ const DashboardNavigation = () => {
             marginLeft: "0px",
             fontWeight: "bold",
           }}
-        >
+          >
           {currentUser.displayName[0]}
           {currentUser.displayName.split(" ")[1][0]}
         </div>
+          </TooltipHost>
       </div>
     </div>
   );
