@@ -1,12 +1,12 @@
 const express = require("express");
 const http = require("http");
 const app = express();
-
+const path=require("path");
 const server = http.createServer(app);
 const socket = require("socket.io");
 const io = require("socket.io")(server, {
   cors: {
-    origin: "http://localhost:3000",
+    
     methods: ["GET", "POST"],
     transports: ["websocket", "polling"],
     credentials: true,
@@ -14,7 +14,7 @@ const io = require("socket.io")(server, {
   allowEIO3: true,
 });
 
-const port = 8000;
+const port = process.env.PORT||8000;
 const users = {};
 
 const socketToRoom = {};
@@ -66,6 +66,12 @@ io.on("connection", (socket) => {
     const roomID = socketToRoom[socket.id];
     io.to(roomID).emit("createMessage", payload.msg);
   });
+});
+
+// const pathInde=path.join(__currDirectory)
+app.use(express.static(path.join(__dirname, '../client/build')));
+app.get('/*', function (req, res) {
+  res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
 
 server.listen(port, () => {

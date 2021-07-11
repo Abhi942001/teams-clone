@@ -5,3 +5,4 @@
 5. host on heroku
 6. ppt
 7. Video
+8. remove warnings
