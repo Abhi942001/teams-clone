@@ -1,9 +1,9 @@
 {
     "scripts": {
         "prepare-client": "cd client && yarn install && yarn build ",
-        "prepare-server": "cd server && yarn install",
+        "prepare-server": "cd Server && yarn install",
         "heroku-postbuild": "yarn prepare-server && yarn prepare-client ",
-        "start": "cd server && yarn start"
+        "start": "cd Server && yarn start"
     },
 
     "dependencies": {}
