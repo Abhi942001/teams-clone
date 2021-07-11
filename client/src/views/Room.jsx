@@ -104,7 +104,7 @@ const Room = (props) => {
     db.collection("user")
       .doc(currentUser.uid)
       .set({ displayName: currentUser.displayName });
-    socketRef.current = io.connect("http://localhost:8000");
+    socketRef.current = io.connect("/");
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
       .then((stream) => {
