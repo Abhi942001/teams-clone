@@ -83,3 +83,15 @@
 .disconnect:hover {
   background: rgb(241, 69, 69);
 }
+
+.raise-hand-icon{
+  position: absolute;
+  z-index: 2;
+  top: 91%;
+  right: 10px;
+  border-radius: 8px;
+  padding: 5px;
+  background: black;
+}
+
+

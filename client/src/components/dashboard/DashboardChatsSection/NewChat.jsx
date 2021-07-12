@@ -37,13 +37,11 @@ const NewChat = ({ getSelectedRoom }) => {
             : prevSelectedKeys.filter((k) => k !== option.key)
         );
       }
-    },
-    [selectedKeys]
-  );
+    },[]);
 
   function createRoom() {
     const roomID = uuidv4();
-    // let title = "Meeting with " + currentUser.displayName;
+  
     db.collection("rooms").doc(roomID).set({ title: roomTitle });
 
     db.collection("user")

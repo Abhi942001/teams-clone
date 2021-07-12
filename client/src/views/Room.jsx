@@ -8,12 +8,7 @@ import { useAuth } from "../contexts/AuthContext";
 
 import { db } from "../firebase";
 import {
-  DefaultButton,
   FontIcon,
-  PrimaryButton,
-  Toggle,
-  Icon,
-  IconButton,
   TooltipHost,
 } from "@fluentui/react";
 import RoomChat from "../components/MeetingRoom/RoomChat/RoomChat";
@@ -36,50 +31,27 @@ const videoContainerStyles = {
   borderRadius: "6px",
 };
 
-const vidCoverIcon = {
-  borderRadius: "100%",
-  width: "82px",
-  height: "82px",
-  background: "hotpink",
-  color: "white",
-  boxShadow: "2px 2px 5px 0px rgba(0, 0, 0, 0.25)",
-  display: "grid",
-  placeItems: "center",
-  fontWeight: "bold",
-  fontSize: "xx-large",
-};
+
 
 const Video = (props) => {
   const ref = useRef();
-  const name = props.displayName ? props.displayName : "N A";
-
-  const [isVideoOn, setIsVideoOn] = useState(true);
   useEffect(() => {
     props.peer.on("stream", (stream) => {
       ref.current.srcObject = stream;
     });
-  }, [props.peer]);
 
-  const coverStyles = {
-    display: isVideoOn ? "none" : "grid",
-    width: "100%",
-    height: "100%",
-    position: "absolute",
-    left: "0px",
-    top: "0px",
-    background: "darkgray",
-    placeItems: "center",
-  };
+
+  }, [props.peer,props.handRaised]);
+
 
   return (
     <div style={videoContainerStyles}>
+      <TooltipHost content={props.displayName}>
       <StyledVideo playsInline autoPlay ref={ref} />
-      <div style={coverStyles}>
-        <div style={vidCoverIcon}>
-          {name[0]}
-          {name.split(" ")[1][0]}
-        </div>
-      </div>
+      {props.handRaised && <div className="raise-hand-icon">
+            <FontIcon iconName="HandsFree" style={{color:"white", fontSize:"20px"}}></FontIcon>
+          </div>}
+    </TooltipHost>
     </div>
   );
 };
@@ -94,6 +66,7 @@ const Room = (props) => {
   const { currentUser } = useAuth();
   const [isMuted, setMuted] = useState(false);
   const [isVideoOff, setVideo] = useState(false);
+  const [ishandRaised,setIsHandRaised]= useState(false);
 
   useEffect(() => {
     db.collection("user")
@@ -105,7 +78,7 @@ const Room = (props) => {
     db.collection("user")
       .doc(currentUser.uid)
       .set({ displayName: currentUser.displayName });
-    socketRef.current = io.connect("http://localhost:8000");
+    socketRef.current = io.connect("/");
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
       .then((stream) => {
@@ -122,12 +95,14 @@ const Room = (props) => {
               peer,
               displayName: currentUser.displayName,
               userID: currentUser.uid,
+              handRaised:false,
             });
             peers.push({
               peerID: userID,
               peer,
               displayName: currentUser.displayName,
               userID: currentUser.uid,
+              handRaised:false,
             });
           });
           setPeers(peers);
@@ -141,6 +116,7 @@ const Room = (props) => {
             peer,
             displayName: currentUser.displayName,
             userID: currentUser.uid,
+            handRaised:false
           });
           setPeers([...peersRef.current]);
         });
@@ -159,6 +135,25 @@ const Room = (props) => {
           peersRef.current = peers;
           setPeers(peers);
         })
+
+        socketRef.current.on("raise-hand-toggle", (id)=>{
+         
+
+          peersRef.current.forEach((peerObj)=>{
+            if(peerObj.peerID===id){
+              if(!peerObj.handRaised){
+                peerObj.handRaised=true;
+            }else{
+                peerObj.handRaised=false;
+            }
+
+            }
+          })
+
+          setPeers([...peersRef.current])
+          
+
+      })
       })
       .catch(() => {
         alert("Please Give Access to Camera and Microphone!");
@@ -168,7 +163,7 @@ const Room = (props) => {
         socketRef.current.disconnect();
       }
 
-  }, []);
+  }, [roomID,currentUser]);
 
   function createPeer(userToSignal, callerID, stream) {
     const peer = new Peer({
@@ -210,6 +205,15 @@ const Room = (props) => {
     history.push("/dashboard");
   };
 
+  const raiseHand=()=>{
+    socketRef.current.emit("raise-hand");
+    if(ishandRaised){
+      setIsHandRaised(false);
+    }else{
+      setIsHandRaised(true);
+    }
+  }
+
   const muteAudio = () => {
     const enabled = userVideo.current.srcObject.getAudioTracks()[0].enabled;
 
@@ -230,30 +234,19 @@ const Room = (props) => {
     }
   };
 
-  const isSelfVideoOn = true;
-
-  const videoCoverStyles = {
-    display: isSelfVideoOn ? "none" : "grid",
-    width: "100%",
-    height: "100%",
-    position: "absolute",
-    left: "0px",
-    top: "0px",
-    background: "darkgray",
-    placeItems: "center",
-  };
 
   return (
     <div className="Room">
       <div className="RoomVideo">
-        <div style={videoContainerStyles}>
+        <div style={videoContainerStyles} >
+          <TooltipHost content={currentUser.displayName}>
+
           <StyledVideo muted ref={userVideo} autoPlay playsInline />
-          <div style={videoCoverStyles}>
-            <div style={vidCoverIcon}>
-              {currentUser.displayName[0]}
-              {currentUser.displayName.split(" ")[1][0]}
-            </div>
-          </div>
+          {ishandRaised && <div className="raise-hand-icon">
+            <FontIcon iconName="HandsFree" style={{color:"white", fontSize:"20px"}}></FontIcon>
+           
+          </div>}
+          </TooltipHost>
         </div>
         {peers.map((peer) => {
           return (
@@ -261,6 +254,7 @@ const Room = (props) => {
               key={peer.peerID}
               peer={peer.peer}
               displayName={peer.displayName}
+              handRaised={peer.handRaised}
             />
           );
         })}
@@ -308,6 +302,27 @@ const Room = (props) => {
           </button>
               </TooltipHost>
         </div>
+            <div className="icon-group">
+            <TooltipHost content="Raise Hand">
+              <button
+                className="toggle-button raise-hand"
+                style={{
+                  color: "#f5f5f5",
+                  background:ishandRaised?"rgba(179, 177, 177, 0.5)":"transparent",
+                }}
+                onClick={raiseHand}
+              >
+                <FontIcon
+                  style={{
+                    color: "white",
+                    fontSize: "20px",
+                    cursor: "pointer",
+                  }}
+                  iconName="HandsFree"
+                ></FontIcon>
+              </button>
+              </TooltipHost>
+            </div>
         <div className="icon-group">
         <TooltipHost content="Disconnect">
           <button

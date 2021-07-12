@@ -1,11 +1,12 @@
-import { useState } from "react";
-import { TextField } from "@fluentui/react/lib/TextField";
+import { useCallback, useEffect, useState } from "react";
 import "./DashboardNavigation.css";
 import { useHistory } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
-import { Icon, TooltipHost } from "@fluentui/react";
+import { Icon, TooltipHost, ComboBox } from "@fluentui/react";
 
-const DashboardNavigation = () => {
+const DashboardNavigation = ({ rooms, getSelectedRoom }) => {
+  const [options, setOptions] = useState([]);
+  const [selectedKey, setSelectedKey] = useState(null);
   const [searchPlaceholderText, setSearchPlaceholderText] = useState(
     "Search..."
   );
@@ -19,21 +20,42 @@ const DashboardNavigation = () => {
     setError("");
 
     try {
-      await logout;
+      await logout();
       history.push("/");
     } catch {
       setError("Failed to log out");
       console.log(error);
     }
   }
+  useEffect(() => {
+    if(rooms){
+    const roomList = Object.keys(rooms).map((key) => ({
+      key,
+      text: rooms[key].title,
+    }));
+
+    setOptions(roomList);
+    }  },[rooms]);
+
+  const onChange = useCallback(
+    (event, option) => {
+      if (option) {
+        
+        setSelectedKey(() => (selectedKey ? [option.key] : null));
+        getSelectedRoom(option.key);
+      }
+    },
+    [selectedKey,getSelectedRoom]
+  );
 
   return (
     <div className="navbar">
       <div>
-        <TextField
-          style={{ background: backColor }}
+        <ComboBox
+          allowFreeform
+          autoComplete={"on"}
           placeholder={searchPlaceholderText}
-          borderless
+          style={{ backgroundColor: backColor }}
           onFocus={() => {
             setSearchPlaceholderText("Search for people and chats.");
             setBackColor("white");
@@ -42,12 +64,17 @@ const DashboardNavigation = () => {
             setSearchPlaceholderText("Search...");
             setBackColor("#e0e0ed");
           }}
+          options={options}
+          onChange={onChange}
+          dropdownMaxWidth={700}
+
+          selectedKey={selectedKey}
         />
       </div>
       <TooltipHost content="Logout">
-      <div className="logout-icons">
-        <Icon iconName="SignOut" onClick={handleLogout}></Icon>
-      </div>
+        <div className="logout-icons">
+          <Icon iconName="SignOut" onClick={handleLogout}></Icon>
+        </div>
       </TooltipHost>
       <div
         style={{
@@ -60,19 +87,18 @@ const DashboardNavigation = () => {
         }}
       >
         <TooltipHost content={currentUser.displayName}>
-
-        <div
-          style={{
-            width: "min-content",
-            color: "#f5f5f5",
-            marginLeft: "0px",
-            fontWeight: "bold",
-          }}
+          <div
+            style={{
+              width: "min-content",
+              color: "#f5f5f5",
+              marginLeft: "0px",
+              fontWeight: "bold",
+            }}
           >
-          {currentUser.displayName[0]}
-          {currentUser.displayName.split(" ")[1][0]}
-        </div>
-          </TooltipHost>
+            {currentUser.displayName[0]}
+            {currentUser.displayName.split(" ")[1][0]}
+          </div>
+        </TooltipHost>
       </div>
     </div>
   );

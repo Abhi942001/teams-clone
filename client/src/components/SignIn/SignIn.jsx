@@ -1,25 +1,17 @@
 import { PrimaryButton } from "@fluentui/react/lib/Button";
-import Button from "@material-ui/core/Button";
 import { useAuth } from "../../contexts/AuthContext";
 import { useHistory } from "react-router-dom";
-import { useEffect } from "react";
-import { db } from "../../firebase";
 import "./SignIn.css";
 
 const SignIn = () => {
-  const { currentUser, login } = useAuth();
+  const {login } = useAuth();
   const history = useHistory();
 
-  useEffect(() => {
-    console.log(currentUser);
-  }, [currentUser]);
+
 
   async function handleLogin() {
     await login();
-    console.log("sign In");
-    // db.collection("user")
-    //   .doc(currentUser.uid)
-    //   .set({ displayName: currentUser.displayName });
+
     history.push("/Dashboard");
   }
 

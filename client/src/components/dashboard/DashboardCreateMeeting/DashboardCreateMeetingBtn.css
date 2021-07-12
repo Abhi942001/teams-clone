@@ -1,3 +1,7 @@
 .create-meeting-btn{
     border-radius: 100%;
 }
+
+.dashboardCreateMeeting{
+    position: relative;
+}

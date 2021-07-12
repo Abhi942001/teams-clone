@@ -17,7 +17,11 @@ export function AuthProvider({children}){
         return auth.signInWithPopup(provider);
     }
     function logout(){
-        return auth.signOut();
+        auth.signOut().then(()=>{
+            return;
+        }).catch(e=>{
+            console.log(e);
+        });
     }
 
     useEffect(()=>{

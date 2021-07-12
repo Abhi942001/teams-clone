@@ -24,7 +24,7 @@ const Dashboard = () => {
         .onSnapshot((userRoomsSnapshot) => {
           userRoomsSnapshot.docs.forEach(async (userRoomID) => {
             let doc = await db.collection("rooms").doc(userRoomID.id).get();
-            let title = doc.data().title;
+            let title = await doc.data().title;
 
             unsubRef.current = db
               .collection("rooms")
@@ -56,7 +56,7 @@ const Dashboard = () => {
     }
     const unsubscribe = fetchRooms();
     return () => unsubscribe;
-  }, [currentUser.uid]);
+  }, [currentUser]);
 
   const getSelectedRoom = (roomID) => {
     setCurrentChat((c) => roomID);
@@ -75,7 +75,7 @@ const Dashboard = () => {
   };
   return (
     <div className="dashboard">
-      <DashboardNavigation />
+      <DashboardNavigation rooms={rooms} getSelectedRoom={getSelectedRoom}/>
       <div className="dashboard-body">
         <div className="dashboardChatsPanel">
           <DashboardChatsPanel

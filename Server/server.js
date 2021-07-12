@@ -6,7 +6,7 @@ const server = http.createServer(app);
 const socket = require("socket.io");
 const io = require("socket.io")(server, {
   cors: {
-    origin: "http://localhost:3000",
+   
     methods: ["GET", "POST"],
     transports: ["websocket", "polling"],
     credentials: true,
@@ -21,8 +21,7 @@ const socketToRoom = {};
 
 io.on("connection", (socket) => {
   socket.on("join room", (roomID) => {
-    console.log(roomID);
-    console.log("join room");
+
     if (users[roomID]) {
       const length = users[roomID].length;
       if (length === 4) {
@@ -37,7 +36,7 @@ io.on("connection", (socket) => {
     socketToRoom[socket.id] = roomID;
     const usersInThisRoom = users[roomID].filter((id) => id !== socket.id);
 
-    console.log(users);
+
     socket.emit("all users", usersInThisRoom);
   });
 
@@ -66,9 +65,8 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("user-left", socket.id);
   });
 
-  socket.on("message", (payload) => {
-    const roomID = socketToRoom[socket.id];
-    io.to(roomID).emit("createMessage", payload.msg);
+  socket.on("raise-hand", () => {
+      socket.broadcast.emit("raise-hand-toggle",socket.id);
   });
 });
 

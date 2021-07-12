@@ -6,7 +6,6 @@ import { TextField } from "@fluentui/react";
 import { IconButton } from "@fluentui/react/lib/Button";
 import { Icon } from "@fluentui/react/lib/Icon";
 import "./RoomChat.css";
-import Picker from "emoji-picker-react";
 
 const RoomChat = (props) => {
   const [messages, setMessages] = useState([]);
@@ -76,7 +75,6 @@ const RoomChat = (props) => {
           >
             <Icon iconName="send"></Icon>
           </IconButton>
-          {/* <Picker /> */}
         </form>
       </div>
     </div>

@@ -1,11 +1,10 @@
 1. Add tooltips-  Done
-2. working search bar
-3. new meeting title
-4. Auth error fix
+2. working search bar- Done
+3. new meeting title- Done
+4. Auth error fix- Done
 5. host on heroku-  Done
 6. ppt
 7. Video
-8. remove warnings
+8. remove warnings- Done
 
 
-Video access after user disconnects
