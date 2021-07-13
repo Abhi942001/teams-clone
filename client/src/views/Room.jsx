@@ -46,12 +46,12 @@ const Video = (props) => {
 
   return (
     <div style={videoContainerStyles}>
-      <TooltipHost content={props.displayName}>
+      
       <StyledVideo playsInline autoPlay ref={ref} />
       {props.handRaised && <div className="raise-hand-icon">
             <FontIcon iconName="HandsFree" style={{color:"white", fontSize:"20px"}}></FontIcon>
           </div>}
-    </TooltipHost>
+    
     </div>
   );
 };
@@ -239,14 +239,14 @@ const Room = (props) => {
     <div className="Room">
       <div className="RoomVideo">
         <div style={videoContainerStyles} >
-          <TooltipHost content={currentUser.displayName}>
+          
 
           <StyledVideo muted ref={userVideo} autoPlay playsInline />
           {ishandRaised && <div className="raise-hand-icon">
             <FontIcon iconName="HandsFree" style={{color:"white", fontSize:"20px"}}></FontIcon>
            
           </div>}
-          </TooltipHost>
+          
         </div>
         {peers.map((peer) => {
           return (

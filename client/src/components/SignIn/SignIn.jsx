@@ -23,6 +23,7 @@ const SignIn = () => {
           <p className="signIn-content-para">
             Meet, chat, call, and collaborate in just one place.
           </p>
+          
           <PrimaryButton
             style={{
               backgroundColor: "#4b53bc",
