@@ -5,6 +5,7 @@
         "heroku-postbuild": "yarn prepare-server && yarn prepare-client ",
         "start": "cd Server && yarn start"
     },
-
-    "dependencies": {}
+    "dependencies": {
+        "dotenv": "^10.0.0"
+    }
 }
